@@ -11,15 +11,15 @@ from initialization import *
 keyNumber = 4 #number of keys, assume they are 'a','b','c','s'.
 
 key_lst = ['a','b','c','s']
-prob = [0.1,0.3,0.2,0.4] # Probability of each individual keys
-w = 10000 # number of triples we want to generate
+prob = [0.1,0.2,0.3,0.4] # Probability of each individual keys
+w = 1000000 # number of triples we want to generate
+words=3*w
 alpha = 0.9 #blue factor
 beta = 0.95 #additional white factor
 
 ####################################################################################################
 #End of manual inputs
 ####################################################################################################
-
 
 
 ####################################################################################################
@@ -89,27 +89,29 @@ def plot_Lemma1():
         i+=1
 
 
-    coeffient=0.729
-    theory_adjusted = [x / coeffient for x in theory]
-    ratio=(sum(theory)/sum(empirical))
-    print(ratio)
+    coefficient=1.373
+    theory_adjusted = [x*coefficient for x in theory]
+    x=range(0,words,3)
+    ratio=(sum(empirical)/sum(theory))
+    print(f"{ratio:.3f}")
 
     plt.figure()
 
     plt.subplot(111)
-    plt.plot(theory)
+    plt.plot(x,theory)
 
-    plt.subplot(111)
-    plt.plot(theory_adjusted)
+    plt.plot(x,empirical)
     #plt.savefig("Lemma2Theory.png")
 
-    plt.subplot(111)
-    plt.plot(empirical)
-    plt.title(f"Empirical VS Theoretical p={prob[0]} q={prob[-1]} \n coefficient used for adjustment={coeffient:.3f} real_ratio={ratio:.3f}" )
+    plt.plot(x,theory_adjusted)
+    plt.ylabel("Nodes")
+    plt.xlabel("Words")
+
+    plt.title(f"Empirical VS Theoretical p={prob[0]} q={prob[-1]} \n coefficient used for adjustment={coefficient:.3f} real ratio={ratio:.3f}" )
     plt.savefig("Lemma1_testing.png")
 
 
-#plot_Lemma1()
+# plot_Lemma1()
 ####################################################################################################
 #Lemma1 Testing End
 ####################################################################################################
@@ -124,21 +126,23 @@ def plot_Lemma1():
 
 #Plotting
 def plot_Lemma2():
+    words=3*w
     theory = []
     theory_adjusted = []
     empirical = []
+
 
 
     #fixed values:
     alpha=-math.log(keyNumber-1,prob[0])
     c=prob[-1]**(alpha)
 
-    i=1
+    i=301
     while(i<=w):
 
         #Theoretical value:
         n=math.log(3*i,prob[0])
-        tri_theory=(3*i)**alpha*(1+(c-c**2*math.log(prob[-1],prob[0]))*n-n*(n*n+2*n-1)*c*c/2)
+        tri_theory=(1+(c-c*c*math.log(prob[-1],prob[0]))*n-n*(n*n+2*n-1)*c*c/2)*((3*i)**alpha)
         theory.append(tri_theory)
 
 
@@ -151,26 +155,28 @@ def plot_Lemma2():
 
         i+=1
 
-    coeffient=1.609
-    theory_adjusted = [x / coeffient for x in theory]
-    ratio=(sum(theory)/sum(empirical))
+    x=range(900,words,3)
+    coefficient=(sum(empirical)/sum(theory))
+    theory_adjusted = [x*coefficient for x in theory]
+    ratio=(sum(empirical)/sum(theory))
     print(ratio)
 
     plt.figure()
 
-    plt.subplot(111)
-    plt.plot(theory)
 
-    plt.subplot(111)
-    plt.plot(theory_adjusted)
-    #plt.savefig("Lemma2Theory.png")
+    plt.plot(x,theory)
 
-    plt.subplot(111)
-    plt.plot(empirical)
-    plt.title(f"Empirical VS Theoretical \n p={prob[0]} q={prob[-1]} coefficient used for adjustment={coeffient}" )
-    plt.savefig("Lemma2_testing.png")
 
-#plot_Lemma2()
+    plt.plot(x,empirical)
+
+    plt.plot(x,theory_adjusted)
+    plt.ylabel("Triangles")
+    plt.xlabel("Words")
+
+    plt.title(f"Empirical VS Theoretical p={prob[0]} q={prob[-1]} \n coefficient used for adjustment={coefficient:.3f} real ratio={ratio:.3f}" )
+    plt.savefig("Lemma2_3000.png")
+
+# plot_Lemma2()
 
 ####################################################################################################
 #Lemma2 Testing End
@@ -191,20 +197,33 @@ def plot_degree_distribution():
             degs[deg] = 1
         else:
             degs[deg] += 1
-    items = sorted(degs.items(), key=lambda x: x[1], reverse=True)
 
-    #print(items[:20])
+    items = sorted(degs.items())
+
+    items_1=[]
+    items_2=[]
+
+    for (k,v) in items:
+        if v>2:
+            items_1.append((k,v))
+        else:
+            items_2.append((k,v))
 
 
-    x=[math.log(x+1,10) for x in range(len(items))]
-    y=[math.log(v,10) for (k,v) in items]
-    plt.scatter( x , y , s=1, marker='o')
 
-    m, b = np.polyfit(x, y, 1)
-    plt.plot(x, [(m*a + b) for a in x], color='red')
+    x_1=[math.log(k+1,10) for (k,v) in items_1]
+    y_1=[math.log(v,10) for (k,v) in items_1]
+    plt.scatter( x_1 , y_1 , s=1, marker='o',color="red")
+
+    x_2=[math.log(k+1,10) for (k,v) in items_2]
+    y_2=[math.log(v,10) for (k,v) in items_2]
+    plt.scatter( x_2 , y_2 , s=1, marker='o',color="blue")
+
+    m, b = np.polyfit(x_1, y_1, 1)
+    plt.plot(x_1, [(m*a + b) for a in x_1], color='red')
 
     plt.ylabel("count(log10(y))")
-    plt.xlabel("degree ranking(log10(x))")
+    plt.xlabel("degree(log10(x))")
     # plt.text(3, 3., f"{m}*x+{b}=y",family="serif")
 
     # ax.scatter( [range(len(items))],[v for (k,v) in items],s=1, marker='o')
@@ -333,17 +352,32 @@ def plot_SPL():
             weights[weight] = 1
         else:
             weights[weight] += 1
-    items = sorted(weights.items(), key=lambda x: x[1], reverse=True)
+    items = sorted(weights.items())
 
-    x=[math.log(x+1,10) for x in range(len(items))]
-    y=[math.log(v,10) for (k,v) in items]
-    plt.scatter( x , y , s=1, marker='o')
+    items_1=[]
+    items_2=[]
 
-    m, b = np.polyfit(x, y, 1)
-    plt.plot(x, [(m*a + b) for a in x], color='red')
+    for (k,v) in items:
+        if v>4:
+            items_1.append((k,v))
+        else:
+            items_2.append((k,v))
+
+
+
+    x_1=[math.log(k+1,10) for (k,v) in items_1]
+    y_1=[math.log(v,10) for (k,v) in items_1]
+    plt.scatter( x_1 , y_1 , s=1, marker='o',color="red")
+
+    x_2=[math.log(k+1,10) for (k,v) in items_2]
+    y_2=[math.log(v,10) for (k,v) in items_2]
+    plt.scatter( x_2 , y_2 , s=1, marker='o',color="blue")
+
+    m, b = np.polyfit(x_1, y_1, 1)
+    plt.plot(x_1, [(m*a + b) for a in x_1], color='red')
 
     plt.ylabel("count(log10(y))")
-    plt.xlabel("weight ranking(log10(x))")
+    plt.xlabel("weight(log10(x))")
 
     if (w==1000000):
         plt.title("SPL(L04) " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+" triples: 1M")
@@ -374,14 +408,30 @@ def plot_TPL():
             triangles[tri] = 1
         else:
             triangles[tri] += 1
-    items = sorted(triangles.items(), key=lambda x: x[1], reverse=True)
 
-    x=[math.log(x+1,10) for x in range(len(items))]
-    y=[math.log(v,10) for (k,v) in items]
-    plt.scatter( x , y , s=1, marker='o')
+    items = sorted(triangles.items())
 
-    m, b = np.polyfit(x, y, 1)
-    plt.plot(x, [(m*a + b) for a in x], color='red')
+    items_1=[]
+    items_2=[]
+
+    for (k,v) in items:
+        if v>4:
+            items_1.append((k,v))
+        else:
+            items_2.append((k,v))
+
+
+
+    x_1=[math.log(k+1,10) for (k,v) in items_1]
+    y_1=[math.log(v,10) for (k,v) in items_1]
+    plt.scatter( x_1 , y_1 , s=1, marker='o',color="red")
+
+    x_2=[math.log(k+1,10) for (k,v) in items_2]
+    y_2=[math.log(v,10) for (k,v) in items_2]
+    plt.scatter( x_2 , y_2 , s=1, marker='o',color="blue")
+
+    m, b = np.polyfit(x_1, y_1, 1)
+    plt.plot(x_1, [(m*a + b) for a in x_1], color='red')
 
     plt.ylabel("count(log10(y))")
     plt.xlabel("triangles(log10(x))")
@@ -394,7 +444,7 @@ def plot_TPL():
     plt.savefig("TPL(L05).png")
 
 
-#plot_TPL()
+plot_TPL()
 ####################################################################################################
 #End of L05: Triangle Power Law (TPL)
 ####################################################################################################
@@ -433,7 +483,7 @@ def plot_EPL():
     plt.savefig("EPL(L06).png")
 
 
-plot_EPL()
+#plot_EPL()
 ####################################################################################################
 #End of L06: Eigenvalue Power Law (EPL)
 ####################################################################################################
