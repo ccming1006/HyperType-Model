@@ -3,6 +3,7 @@ from scipy import linalg as li
 import math
 import networkx as nx
 import matplotlib.pyplot as plt
+import powerlaw
 from initialization import *
 
 ####################################################################################################
@@ -12,7 +13,7 @@ keyNumber = 4 #number of keys, assume they are 'a','b','c','s'.
 
 key_lst = ['a','b','c','s']
 prob = [0.1,0.2,0.3,0.4] # Probability of each individual keys
-w = 1000000 # number of triples we want to generate
+w = 1000 # number of triples we want to generate
 words=3*w
 alpha = 0.9 #blue factor
 beta = 0.95 #additional white factor
@@ -188,7 +189,7 @@ def plot_Lemma2():
 #L01: Degree Distribution
 ####################################################################################################
 # reference: http://snap.stanford.edu/class/cs224w-2012/nx_tutorial.pdf
-def plot_degree_distribution():
+def plot_degree_distribution(mode):
     clustering_coe=nx.average_clustering(G)
     degs = {}
     for n in G.nodes():
@@ -200,43 +201,62 @@ def plot_degree_distribution():
 
     items = sorted(degs.items())
 
-    items_1=[]
-    items_2=[]
+    if(mode==1):
+        file1 = open("L01Data.txt","a+")
+        file1.seek(0)
+        file1.truncate()
+        for i in degs.values():
+            file1.write(str(i)+"\n")
+        file1.close()
 
-    for (k,v) in items:
-        if v>2:
-            items_1.append((k,v))
-        else:
-            items_2.append((k,v))
-
-
-
-    x_1=[math.log(k+1,10) for (k,v) in items_1]
-    y_1=[math.log(v,10) for (k,v) in items_1]
-    plt.scatter( x_1 , y_1 , s=1, marker='o',color="red")
-
-    x_2=[math.log(k+1,10) for (k,v) in items_2]
-    y_2=[math.log(v,10) for (k,v) in items_2]
-    plt.scatter( x_2 , y_2 , s=1, marker='o',color="blue")
-
-    m, b = np.polyfit(x_1, y_1, 1)
-    plt.plot(x_1, [(m*a + b) for a in x_1], color='red')
-
-    plt.ylabel("count(log10(y))")
-    plt.xlabel("degree(log10(x))")
-    # plt.text(3, 3., f"{m}*x+{b}=y",family="serif")
-
-    # ax.scatter( [range(len(items))],[v for (k,v) in items],s=1, marker='o')
-    # ax.set_xscale('log')
-    # ax.set_yscale('log')
-    if (w==1000000):
-        plt.title("3D Degree Distri " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+" triples: 1M")
+    if(mode==2):
+        data=list(degs.values())
+        fit = powerlaw.Fit(data)
+        print(fit.discrete)
+        #print(fit.distribution)
+        #print(fit.distribution_compare('power_law', 'exponential'))
+        # print(results.power_law.alpha)
+        # print(results.power_law.xmin)
+        # print(results.power_law)
+        # R, p = results.distribution_compare('power_law', 'lognormal')
     else:
-        plt.title("3D Degree Distri " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+f" triples: {w}")
+        items_1=[]
+        items_2=[]
 
-    plt.savefig("Degree Distribution testing.png")
+        for (k,v) in items:
+            if v>2:
+                items_1.append((k,v))
+            else:
+                items_2.append((k,v))
 
-#plot_degree_distribution()
+
+
+        x_1=[math.log(k+1,10) for (k,v) in items_1]
+        y_1=[math.log(v,10) for (k,v) in items_1]
+        plt.scatter( x_1 , y_1 , s=1, marker='o',color="red")
+
+        x_2=[math.log(k+1,10) for (k,v) in items_2]
+        y_2=[math.log(v,10) for (k,v) in items_2]
+        plt.scatter( x_2 , y_2 , s=1, marker='o',color="blue")
+
+        m, b = np.polyfit(x_1, y_1, 1)
+        plt.plot(x_1, [(m*a + b) for a in x_1], color='red')
+
+        plt.ylabel("count(log10(y))")
+        plt.xlabel("degree(log10(x))")
+        # plt.text(3, 3., f"{m}*x+{b}=y",family="serif")
+
+        # ax.scatter( [range(len(items))],[v for (k,v) in items],s=1, marker='o')
+        # ax.set_xscale('log')
+        # ax.set_yscale('log')
+        if (w==1000000):
+            plt.title("3D Degree Distri " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+" triples: 1M")
+        else:
+            plt.title("3D Degree Distri " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+f" triples: {w}")
+
+        plt.savefig("Degree Distribution testing.png")
+
+#plot_degree_distribution(2)
 
 ####################################################################################################
 #End of L01: Degree Distribution
@@ -248,7 +268,7 @@ def plot_degree_distribution():
 ####################################################################################################
 
 #Plotting
-def plot_DPL():
+def plot_DPL(mode):
     Nodes = []
     Edges = []
 
@@ -263,26 +283,30 @@ def plot_DPL():
 
         i+=1
 
+    if (mode==1):
+        fit = powerlaw.Fit(Edges)
 
-    x=[math.log(n,10) for n in Nodes]
-    y=[math.log(e,10) for e in Edges]
-    plt.scatter( x , y , s=1, marker='o')
 
-    m, b = np.polyfit(x, y, 1)
-    plt.plot(x, [(m*a + b) for a in x], color='red')
-
-    plt.ylabel("|E|(log10(y))")
-    plt.xlabel("|N|(log10(x))")
-
-    if (w==1000000):
-        plt.title("DPL(L02) " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+" triples: 1M")
     else:
-        plt.title("DPL(L02) " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+f" triples: {w}")
+        x=[math.log(n,10) for n in Nodes]
+        y=[math.log(e,10) for e in Edges]
+        plt.scatter( x , y , s=1, marker='o')
 
-    plt.savefig("DPL(L02).png")
+        m, b = np.polyfit(x, y, 1)
+        plt.plot(x, [(m*a + b) for a in x], color='red')
+
+        plt.ylabel("|E|(log10(y))")
+        plt.xlabel("|N|(log10(x))")
+
+        if (w==1000000):
+            plt.title("DPL(L02) " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+" triples: 1M")
+        else:
+            plt.title("DPL(L02) " +f"equation: {m:.3f}*x+{b:.3f}=y\n  key: "+str(key_lst)+" prob: "+str(prob)+f" triples: {w}")
+
+        plt.savefig("DPL(L02).png")
 
 
-#plot_DPL()
+#plot_DPL(1)
 ####################################################################################################
 #End of L02: Densification Power Law (DPL)
 ####################################################################################################
@@ -444,7 +468,7 @@ def plot_TPL():
     plt.savefig("TPL(L05).png")
 
 
-plot_TPL()
+#plot_TPL()
 ####################################################################################################
 #End of L05: Triangle Power Law (TPL)
 ####################################################################################################
