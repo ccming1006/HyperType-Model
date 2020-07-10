@@ -181,9 +181,12 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
             TNum = TNum - 1
 
     #adding edges to Graph
-    adding_edges(L1,L2,G)
-    adding_edges(L1,L3,G)
-    adding_edges(L2,L3,G)
+    if(L1!=L2):
+        adding_edges(L1,L2,G)
+    if(L1!=L3):
+        adding_edges(L1,L3,G)
+    if(L2!=L3):
+        adding_edges(L2,L3,G)
 
     triple = []
     triple.append(L1)
