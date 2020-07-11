@@ -10,10 +10,10 @@ from initialization import *
 keyNumber = 4 #number of keys, assume they are 'a','b','c','s'.
 
 key_lst = ['a','b','c','s']
-prob = [0.1,0.2,0.3,0.4] # Probability of each individual keys
-w = 100 # number of triples we want to generate
-alpha = 0.9 #blue factor
-beta = 0.8 #additional white factor
+prob = [0.25,0.25,0.25,0.25] # Probability of each individual keys
+w = 3 # number of triples we want to generate
+alpha = 0.0 #blue factor
+beta = 0.0 #additional white factor
 
 ####################################################################################################
 #End of manual inputs
@@ -51,8 +51,19 @@ imbalance(pt,keyNumber,alpha,beta,prob)
 
 imbalanceMatrix(pm,keyNumber,beta,prob)
 
+for i in range(keyNumber):
+    for j in range(keyNumber):
+        for k in range(keyNumber):
+            plst.append(pt[i][j][k])
+
+for i in range(keyNumber):
+    for j in range(keyNumber):
+        mplst.append(pm[i][j])
+
+
+
 new_graph=generate_graph(G,w,elst,plst,melst,mplst,key_lst,prob)
-# print(new_graph)
+print(new_graph)
 ########################Initialization End####################################
 
 

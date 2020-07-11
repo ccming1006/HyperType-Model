@@ -20,10 +20,10 @@ def tensor_initialization(keyNumber,key_lst,prob,tensor,pt,plst,elst):
                 word = (key_lst[i]+key_lst[j]+key_lst[k])
                 elst.append(word)
                 Probability = prob[i]*prob[j]*prob[k]
-                Probability = round(Probability,5)
+                Probability = round(Probability,10)
                 tensor[i][j].append(word)
                 pt[i][j].append(Probability)
-                plst.append(Probability)
+
 
 # construct the matrix
 def matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst):
@@ -33,10 +33,10 @@ def matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst):
         for j in range(keyNumber):
             word = (key_lst[i]+key_lst[j])
             melst.append(word)
-            Probability = round(prob[i]*prob[j],5)
+            Probability = round(prob[i]*prob[j],10)
             matrix[i].append(word)
             pm[i].append(Probability)
-            mplst.append(Probability)
+
 
 def print_tensor(ten,key):
     for i in range(key):
