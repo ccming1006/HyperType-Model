@@ -77,7 +77,7 @@ def matrixRowSum(mat,key,row):
     return sum
 
 
-def imbalance(ten,key,al,be,prob): #tensor, keyNumber, alpha, beta
+def imbalance(ten,key,al,be,prob,plst): #tensor, keyNumber, alpha, beta
     for i in range(key):
         for j in range(key):
             for k in range(key):
@@ -89,15 +89,22 @@ def imbalance(ten,key,al,be,prob): #tensor, keyNumber, alpha, beta
                     ten[i][j][k] = round(ten[i][j][k]*be,10)
     for i in range(key):
         ten[i][i][i] = ten[i][i][i]+(prob[i]-layerSum(ten,key,i))
+    for i in range(key):
+        for j in range(key):
+            for k in range(key):
+                plst.append(ten[i][j][k])
 
 
-def imbalanceMatrix(mat,key,be,prob):#matrix, keyNumber, beta
+def imbalanceMatrix(mat,key,be,prob,mplst):#matrix, keyNumber, beta
     for i in range(key):
         for j in range(key):
             if(i != j):
                 mat[i][j] = round(mat[i][j]*be,10)
     for i in range(key):
         mat[i][i] = round(mat[i][i]+(prob[i]-matrixRowSum(mat,key,i)),10)
+    for i in range(key):
+        for j in range(key):
+            mplst.append(mat[i][j])
 
 
 #adding an edge with weights

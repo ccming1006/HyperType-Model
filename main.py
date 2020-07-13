@@ -12,8 +12,8 @@ keyNumber = 4 #number of keys, assume they are 'a','b','c','s'.
 key_lst = ['a','b','c','s']
 prob = [0.25,0.25,0.25,0.25] # Probability of each individual keys
 w = 3 # number of triples we want to generate
-alpha = 0.0 #blue factor
-beta = 0.0 #additional white factor
+alpha = 0.9 #blue factor
+beta = 0.8 #additional factor
 
 ####################################################################################################
 #End of manual inputs
@@ -47,23 +47,17 @@ tensor_initialization(keyNumber,key_lst,prob,tensor,pt,plst,elst)
 #matrix
 matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst)
 
-imbalance(pt,keyNumber,alpha,beta,prob)
+imbalance(pt,keyNumber,alpha,beta,prob,plst)
 
-imbalanceMatrix(pm,keyNumber,beta,prob)
+imbalanceMatrix(pm,keyNumber,beta,prob,mplst)
 
-for i in range(keyNumber):
-    for j in range(keyNumber):
-        for k in range(keyNumber):
-            plst.append(pt[i][j][k])
 
-for i in range(keyNumber):
-    for j in range(keyNumber):
-        mplst.append(pm[i][j])
 
 
 
 new_graph=generate_graph(G,w,elst,plst,melst,mplst,key_lst,prob)
 print(new_graph)
+print(G.number_of_edges())
 ########################Initialization End####################################
 
 
@@ -87,11 +81,11 @@ print(new_graph)
 
 
 ###########################Draw Graph#################################
-# nx.draw(G, with_labels=False,node_size=5, edge_color='grey')
+nx.draw(G, with_labels=False,node_size=5, edge_color='grey')
 # nx.draw_spring(G, with_labels=False,node_size=40)
 # nx.draw_planar(G, with_labels=True)
 # nx.draw_random(G, with_labels=False,node_size=40)
-# plt.show()
+plt.show()
 ###########################Draw Graph End#################################
 
 
