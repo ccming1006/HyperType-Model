@@ -194,6 +194,8 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
         adding_edges(L1,L3,G)
     if(L2!=L3):
         adding_edges(L2,L3,G)
+    #in case all three nodes are the same
+    G.add_node(L1)       
 
     triple = []
     triple.append(L1)
