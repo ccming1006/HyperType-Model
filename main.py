@@ -49,7 +49,7 @@ matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst)
 
 imbalance(pt,keyNumber,alpha,beta,prob,plst)
 
-imbalanceMatrix(pm,keyNumber,beta,prob,mplst)
+imbalanceMatrix(pm,keyNumber,alpha,prob,mplst)
 
 
 

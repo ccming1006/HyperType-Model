@@ -50,7 +50,7 @@ matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst)
 
 imbalance(pt,keyNumber,alpha,beta,prob)
 
-imbalanceMatrix(pm,keyNumber,beta,prob)
+imbalanceMatrix(pm,keyNumber,alpha,prob)
 
 new_graph=generate_graph(G,w,elst,plst,melst,mplst,key_lst,prob)
 # print(new_graph)

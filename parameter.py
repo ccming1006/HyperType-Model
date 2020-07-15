@@ -62,7 +62,7 @@ def initialization(keyNumber,key_lst,prob,w,alpha,beta):
 
     imbalance(pt,keyNumber,alpha,beta,prob,plst)
 
-    imbalanceMatrix(pm,keyNumber,beta,prob,mplst)
+    imbalanceMatrix(pm,keyNumber,alpha,prob,mplst)
 
 
     new_graph=generate_graph(G,w,elst,plst,melst,mplst,key_lst,prob)

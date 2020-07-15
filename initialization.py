@@ -95,11 +95,11 @@ def imbalance(ten,key,al,be,prob,plst): #tensor, keyNumber, alpha, beta
                 plst.append(ten[i][j][k])
 
 
-def imbalanceMatrix(mat,key,be,prob,mplst):#matrix, keyNumber, beta
+def imbalanceMatrix(mat,key,al,prob,mplst):#matrix, keyNumber, alpha
     for i in range(key):
         for j in range(key):
             if(i != j):
-                mat[i][j] = round(mat[i][j]*be,10)
+                mat[i][j] = round(mat[i][j]*al,10)
     for i in range(key):
         mat[i][i] = round(mat[i][i]+(prob[i]-matrixRowSum(mat,key,i)),10)
     for i in range(key):
@@ -195,7 +195,7 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
     if(L2!=L3):
         adding_edges(L2,L3,G)
     #in case all three nodes are the same
-    G.add_node(L1)       
+    G.add_node(L1)
 
     triple = []
     triple.append(L1)
