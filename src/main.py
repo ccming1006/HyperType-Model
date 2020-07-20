@@ -71,9 +71,11 @@ initialization(w)
 ###########################Initialization for 3D Typing Model End####################################
 
 
+
+
 ###########################Initialization for 2D Typing Model####################################
-def initialization2D(pairs):
-    G.clear()
+def initialization2D(pairs,keyNumber,key_lst,prob):
+
     tensor.clear()
     matrix.clear()
     pt.clear()
@@ -93,9 +95,25 @@ def initialization2D(pairs):
     new_graph=generate_graph2D(G,pairs,elst,plst,melst,mplst,key_lst,prob)
     # print(new_graph)
     # print(G.number_of_edges())
-# initialization2D(w)
+initialization2D(60000,keyNumber,key_lst,prob)
 ###########################Initialization for 2D Typing Model End####################################
+print("Nodes: "+str(G.order()))
+print("Edges: "+str(G.size()))
+print('Average clustering coefficient: '+str(nx.average_clustering(G)))
+print('Global clustering coefficient: '+str(nx.transitivity(G)))
+print('Size of the LCC: '+str(len(max(nx.connected_components(G), key=len))))
 
+###########################Erdos Renyi Model#########################################################
+ConMat_Nodes=23133
+ConMat_Edges=93497
+
+def Erdos_Renyi(nodes,edges):
+    ER = nx.gnm_random_graph(nodes, edges)
+    G.add_edges_from(ER.edges)
+    G.add_nodes_from(ER.nodes)
+
+Erdos_Renyi(ConMat_Nodes-G.order(),ConMat_Edges-G.size())
+###########################Erdos Renyi Model End######################################################
 
 
 #
