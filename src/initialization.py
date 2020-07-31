@@ -129,116 +129,65 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
     while(TNum == 3):
         lst = np.random.choice(elst,1,p=plst)[0]
 
+
+        L1 = L1 + lst[0]
+
+        L2 = L2 + lst[1]
+
+        L3 = L3 + lst[2]
+
         if (lst[0] == 's'):
-            if (len(L1) != 0):
-                L1 = L1 + lst[0]
-                T_L1 = False
-                TNum = TNum - 1
-        else:
-            L1 = L1 + lst[0]
-
+            T_L1 = False
+            TNum = TNum - 1
         if (lst[1] == 's'):
-            if (len(L2) != 0):
-                L2 = L2 + lst[1]
-                T_L2 = False
-                TNum = TNum - 1
-        else:
-            L2 = L2 + lst[1]
-
+            T_L2 = False
+            TNum = TNum - 1
         if (lst[2] == 's'):
-            if (len(L3) != 0):
-                L3 = L3 + lst[2]
-                T_L3 = False
-                TNum = TNum - 1
-        else:
-            L3 = L3 + lst[2]
+            T_L3 = False
+            TNum = TNum - 1
 
 
 
     while(TNum == 2):
         lst = np.random.choice(melst,1,p=mplst)[0]
         if(T_L1 == False):
-            if (lst[0] == 's'):
-                if (len(L2) != 0):
-                    L2 = L2 + lst[0]
-                    T_L2 = False
-                    TNum = TNum - 1
-            else:
-                L2 = L2 + lst[0]
-
-            if (lst[1] == 's'):
-                if (len(L3) != 0):
-                    L3 = L3 + lst[1]
-                    T_L3 = False
-                    TNum = TNum - 1
-            else:
-                L3 = L3 + lst[1]
-
-
-
+            L2 = L2 + lst[0]
+            L3 = L3 + lst[1]
+            if(lst[0] == 's'):
+                T_L2 = False
+                TNum = TNum - 1
+            if(lst[1] == 's'):
+                T_L3 = False
+                TNum = TNum - 1
         elif(T_L2 == False):
-            if (lst[0] == 's'):
-                if (len(L1) != 0):
-                    L1 = L1 + lst[0]
-                    T_L1 = False
-                    TNum = TNum - 1
-            else:
-                L1 = L1 + lst[0]
-
-            if (lst[1] == 's'):
-                if (len(L3) != 0):
-                    L3 = L3 + lst[1]
-                    T_L3 = False
-                    TNum = TNum - 1
-            else:
-                L3 = L3 + lst[1]
-
-
-
-
+            L1 = L1 + lst[0]
+            L3 = L3 + lst[1]
+            if(lst[0] == 's'):
+                T_L1 = False
+                TNum = TNum - 1
+            if(lst[1] == 's'):
+                T_L3 = False
+                TNum = TNum - 1
         else:
-            if (lst[0] == 's'):
-                if (len(L1) != 0):
-                    L1 = L1 + lst[0]
-                    T_L1 = False
-                    TNum = TNum - 1
-            else:
-                L1 = L1 + lst[0]
-
-            if (lst[1] == 's'):
-                if (len(L2) != 0):
-                    L2 = L2 + lst[1]
-                    T_L2 = False
-                    TNum = TNum - 1
-            else:
-                L2 = L2 + lst[1]
+            L1 = L1 + lst[0]
+            L2 = L2 + lst[1]
+            if(lst[0] == 's'):
+                T_L1 = False
+                TNum = TNum - 1
+            if(lst[1] == 's'):
+                T_L2 = False
+                TNum = TNum - 1
 
     while(TNum == 1):
         lst = np.random.choice(key_lst,1,p=prob)[0]
         if(T_L1 == True):
-            if (lst[0] == 's'):
-                if (len(L1) != 0):
-                    L1 = L1 + lst[0]
-                    T_L1 = False
-                    TNum = TNum - 1
-            else:
-                L1 = L1 + lst[0]
+            L1 = L1 + lst[0]
         elif(T_L2 == True):
-            if (lst[0] == 's'):
-                if (len(L2) != 0):
-                    L2 = L2 + lst[0]
-                    T_L2 = False
-                    TNum = TNum - 1
-            else:
-                L2 = L2 + lst[0]
+            L2 = L2 + lst[0]
         else:
-            if (lst[0] == 's'):
-                if (len(L3) != 0):
-                    L3 = L3 + lst[0]
-                    T_L3 = False
-                    TNum = TNum - 1
-            else:
-                L3 = L3 + lst[0]
+            L3 = L3 + lst[0]
+        if(lst[0]=='s'):
+            TNum = TNum - 1
 
 
     #adding edges to Graph
@@ -255,42 +204,6 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
     triple.append(L1)
     triple.append(L2)
     triple.append(L3)
-
-    # if len(L1)>4:
-    #     words_longer_than_4+=1
-    # if len(L2)>4:
-    #     words_longer_than_4+=1
-    # if len(L3)>4:
-    #     words_longer_than_4+=1
-    # if L1[0]=='a':
-    #     counta+=1
-    # elif L1[0]=='b':
-    #     countb+=1
-    # elif L1[0]=='c':
-    #     countc+=1
-    # else:
-    #     counts+=1
-    #
-    #
-    #
-    # if L2[0]=='a':
-    #     counta+=1
-    # elif L2[0]=='b':
-    #     countb+=1
-    # elif L2[0]=='c':
-    #     countc+=1
-    # else:
-    #     counts+=1
-    #
-    #
-    # if L3[0]=='a':
-    #     counta+=1
-    # elif L3[0]=='b':
-    #     countb+=1
-    # elif L3[0]=='c':
-    #     countc+=1
-    # else:
-    #     counts+=1
     return triple
 
 
@@ -300,5 +213,11 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
 def generate_graph(G,triples,elst,plst,melst,mplst,key_lst,prob):
     graph = []
     for i in range(triples):
+        graph.append(make(G,elst,plst,melst,mplst,key_lst,prob))
+    return graph
+
+def generate_graph_nodes(G,nodes,elst,plst,melst,mplst,key_lst,prob):
+    graph = []
+    while G.order()<nodes:
         graph.append(make(G,elst,plst,melst,mplst,key_lst,prob))
     return graph
