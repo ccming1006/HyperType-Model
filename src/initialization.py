@@ -7,8 +7,17 @@ import matplotlib.pyplot as plt
 #All Functions are below:
 ####################################################################################################
 
+# parameters:
+#     int keyNumber, number of keys in the key list
+#     lst key_lst, a list consisting all the keys
+#     lst prob, a list consisting probability fo keys
+#     lst(3d) tensor, a 3 dimensional list of key combinations will be made after tensor_initialization is called
+#     lst(2d) pt, a probability table
+#     lst plst, a probability list
+#     lst elst, an entry list
+# tensor_initialization constructs the tensor (ten). After running, the procedure produces a tensor with combinations of
+#     keys at each entry, according to the entry's index. Probability list (plst) and entry list (elst) are also produced.
 
-# construct the tensor, append entries to corresponding list
 def tensor_initialization(keyNumber,key_lst,prob,tensor,pt,plst,elst):
     for i in range(keyNumber):
         tensor.append([])
@@ -25,7 +34,15 @@ def tensor_initialization(keyNumber,key_lst,prob,tensor,pt,plst,elst):
                 pt[i][j].append(Probability)
 
 
-# construct the matrix
+# parameters (above mentioned parameters will not be introduced again):
+#     lst(2d) matrix, a 2 dimensional list of key combinations will be made after matrix_initialization is called
+#     lst(2d) pm, probability matrix
+#     lst mplst, probability list for the produced matrix
+#     lst melst, entry list for the produced matrix
+# matrix_initialization constructs the matrix (matrix). After running, the produre produces a matrix with combinations of two keys at
+#     each entry, according to the entry's index. Probability list (mplst) and entry list (melst) are also produced.
+
+
 def matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst):
     for i in range(keyNumber):
         matrix.append([])
@@ -37,22 +54,25 @@ def matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst):
             matrix[i].append(word)
             pm[i].append(Probability)
 
+# print_tensor takes a tensor and the key number, and will print the entries in the tensor.
 
-def print_tensor(ten,key):
-    for i in range(key):
-        for j in range(key):
+def print_tensor(ten,keyNumber):
+    for i in range(keyNumber):
+        for j in range(keyNumber):
             print(ten[i][j][0], ten[i][j][1], ten[i][j][2])
         print('\n')
 
-def layerSum(ten,key,lay):
+# layerSum takes a tensor, the key number, and the layer index. It will return the sum of probability of a layer of tensor.
+def layerSum(ten,keyNumber,lay):
     sum = 0.0
-    for i in range(key):
-        for j in range(key):
+    for i in range(keyNumber):
+        for j in range(keyNumber):
             sum = sum + ten[lay][i][j]
 
     sum = round(sum,10)
     return sum
 
+# rowSum takes a tensor, the key number, and the row index. It will sum up the probability of the desinated row for each layer, and return it.
 def rowSum(ten,key,row):
     sum = 0.0
     for i in range(key):
@@ -61,6 +81,7 @@ def rowSum(ten,key,row):
     sum = round(sum,10)
     return sum
 
+# colSum takes a tensor, the key number, and the col index. It will sum up the probability of the desinated column for each layer, and return it.
 def colSum(ten,key,col):
     sum = 0.0
     for i in range(key):
@@ -69,6 +90,7 @@ def colSum(ten,key,col):
     sum = round(sum,10)
     return sum
 
+# colSum takes a tensor, the key number, and the row index. It will sum up the probability of the desinated row of mat, and return it.
 def matrixRowSum(mat,key,row):
     sum = 0.0
     for i in range(key):
@@ -76,6 +98,11 @@ def matrixRowSum(mat,key,row):
     sum = round(sum,10)
     return sum
 
+# parameters (above mentioned parameters will not be introduced again):
+#     float al, an imbalance parameter from 0 to 1.
+#     float be, an imbalance parameter from 0 to 1.
+# imbalance will decrease type 2 and 3 entries of ten by multipling probability on type 2 and 3 entries by be, and probability of type 3 entries by al again.
+#     Then type 1 entries will increase their probability by the amount that type 2 and 3 entries on their layers decreased.
 
 def imbalance(ten,key,al,be,prob,plst): #tensor, keyNumber, alpha, beta
     for i in range(key):
@@ -94,7 +121,9 @@ def imbalance(ten,key,al,be,prob,plst): #tensor, keyNumber, alpha, beta
             for k in range(key):
                 plst.append(ten[i][j][k])
 
-
+# imbalanceMatrix will decrease type 2 entries of mat by multipling probability on type 2 entries by be.
+#     Then type 1 entries will increase their probability by the amount that type 2 entries on
+#     their layers decreased.
 def imbalanceMatrix(mat,key,al,prob,mplst):#matrix, keyNumber, alpha
     for i in range(key):
         for j in range(key):
@@ -116,7 +145,12 @@ def adding_edges(e1,e2,G):
         # new edge. add with weight=1
         G.add_edge(e1,e2, weight=1)
 
-
+# parameters (above mentioned parameters will not be introduced again):
+#     grah G, a graph
+# make takes the probability lists and entry lists for tensor and matrix, and constructs a triple (a group of three words) based on those Probability
+#     and entries. A word is terminated if an space character is appended to it. When no word terminates, it chooses entries from ten; when one word terminates,
+#     it chooses entries from mat; when two words terminate, it chooses entries from prob (in this case will only choose one letter from key array); when all
+#     three words terminate, the triple will be added to G and returned.
 def make(G,elst,plst,melst,mplst,key_lst,prob):
     L1 = ''
     L2 = ''
@@ -207,14 +241,21 @@ def make(G,elst,plst,melst,mplst,key_lst,prob):
     return triple
 
 
-
-
+# parameters (above mentioned parameters will not be introduced again):
+#     int triples, number of triples to generate
+# generate_graph will generate triples with make() for the desinated number of triples, and put nodes and edges into G.
+# For example, new_graph=generate_graph(G,10000,elst,plst,melst,mplst,key_lst,prob) will generate a new graph.
 
 def generate_graph(G,triples,elst,plst,melst,mplst,key_lst,prob):
     graph = []
     for i in range(triples):
-        graph.append(make(G,elst,plst,melst,mplst,key_lst,prob))
+        graph.append(make(G,elst,plst,melst,mplst,key_lst,prob))#
     return graph
+
+# parameters (above mentioned parameters will not be introduced again):
+#     int nodes, number of nodes to generate
+# generate_graph will generate triples with make() for the desinated number of nodes, and put nodes and edges into G.
+# For example, new_graph=generate_graph_nodes(G,10000,elst,plst,melst,mplst,key_lst,prob) will generate a new graph.
 
 def generate_graph_nodes(G,nodes,elst,plst,melst,mplst,key_lst,prob):
     graph = []
