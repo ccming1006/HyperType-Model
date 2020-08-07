@@ -4,11 +4,15 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from initialization import *
 
+# This file is to define all the functions needed in typing model
 ####################################################################################################
 #All Functions are below:
 ####################################################################################################
 
-
+# make2D takes the probability lists and entry lists for tensor and matrix, and constructs a pair (a group of two words) based on those Probability
+#     and entries. A word is terminated if an space character is appended to it. When no word terminates, it chooses entries from mat; when one word terminates,
+#     it chooses entries from prob (in this case will only choose one letter from key array); when all
+#     three words terminate, the triple will be added to G and returned.
 def make2D(G,elst,plst,melst,mplst,key_lst,prob):
     L1 = ''
     L2 = ''
@@ -55,8 +59,18 @@ def make2D(G,elst,plst,melst,mplst,key_lst,prob):
 
 
 
+# generate_graph2D will generate pairs with make() for the desinated number of triples, and put nodes and edges into G.
+
 def generate_graph2D(G,pairs,elst,plst,melst,mplst,key_lst,prob):
     graph = []
     for i in range(pairs):
+        graph.append(make2D(G,elst,plst,melst,mplst,key_lst,prob))
+    return graph
+
+# generate_graph2D_nodes will generate triples with make() for the desinated number of nodes, and put nodes and edges into G.
+
+def generate_graph2D_nodes(G,nodes,elst,plst,melst,mplst,key_lst,prob):
+    graph = []
+    while G.order()<nodes:
         graph.append(make2D(G,elst,plst,melst,mplst,key_lst,prob))
     return graph
