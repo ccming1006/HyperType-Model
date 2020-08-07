@@ -3,6 +3,7 @@ import math
 import networkx as nx
 import matplotlib.pyplot as plt
 
+# This file is to initialize all the variables used in HyperType Model
 ####################################################################################################
 #All Functions are below:
 ####################################################################################################
@@ -254,7 +255,7 @@ def generate_graph(G,triples,elst,plst,melst,mplst,key_lst,prob):
 
 # parameters (above mentioned parameters will not be introduced again):
 #     int nodes, number of nodes to generate
-# generate_graph will generate triples with make() for the desinated number of nodes, and put nodes and edges into G.
+# generate_graph_nodes will generate triples with make() for the desinated number of nodes, and put nodes and edges into G.
 # For example, new_graph=generate_graph_nodes(G,10000,elst,plst,melst,mplst,key_lst,prob) will generate a new graph.
 
 def generate_graph_nodes(G,nodes,elst,plst,melst,mplst,key_lst,prob):
