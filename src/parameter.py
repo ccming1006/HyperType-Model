@@ -8,14 +8,12 @@ from initialization import *
 #Parameter that require manual inputs
 ####################################################################################################
 keyNumber = 4 #number of keys, assume they are 'a','b','c','s'.
-
 key_lst = ['a','b','c','s']
 prob = [0.25,0.25,0.25,0.25] # Probability of each individual keys
 w = 10000 # number of triples we want to generate
 nodes = 10000 # number of nodes we want to generate
-alpha = 0.9 #blue factor
-beta = 0.95
- #additional white factor
+alpha = 0.9 #factor alpha
+beta = 0.95 #factor beta
 
 ####################################################################################################
 #End of manual inputs
@@ -40,7 +38,7 @@ melst = []#entry list (matrix)
 ####################################################################################################
 #End of global variables
 ####################################################################################################
-
+#clear_all() is used when we clear all the global variables above
 def clear_all():
     G.clear()
     tensor.clear()
@@ -53,6 +51,7 @@ def clear_all():
     melst.clear()
 
 ###########################Initialization####################################
+#initializa all the required variables
 def initialization(keyNumber,key_lst,prob,w,nodes,alpha,beta):
 
     #clear
@@ -65,22 +64,26 @@ def initialization(keyNumber,key_lst,prob,w,nodes,alpha,beta):
     mplst.clear()
     melst.clear()
 
-    #Tensor
+    #initize the tensor
     tensor_initialization(keyNumber,key_lst,prob,tensor,pt,plst,elst)
 
-    #matrix
+    #initize the matrix
     matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst)
 
+    #community algorithm: increase the probability of choosing entries with same letters for tensor
     imbalance(pt,keyNumber,alpha,beta,prob,plst)
 
+    #community algorithm: increase the probability of choosing entries with same letters for matrix
     imbalanceMatrix(pm,keyNumber,beta,prob,mplst)
 
 
+    # We use funtion generate_graph when we want to generate desinated number of triples
     # new_graph=generate_graph(G,w,elst,plst,melst,mplst,key_lst,prob)
+
+    # We use funtion generate_graph_nodes when we want to generate desinated number of nodes
     new_graph=generate_graph_nodes(G,nodes,elst,plst,melst,mplst,key_lst,prob)
 
     return new_graph
-# print(new_graph)
 ########################Initialization End####################################
 
 
@@ -92,9 +95,10 @@ def initialization(keyNumber,key_lst,prob,w,nodes,alpha,beta):
 ####################################################################################################
 
 ########################Legend: the num of keys####################################
-
-#Mode a is GCC
-#Mode b is Average CC
+#keys() funtion is to generate plots showing the change of ACC or GCC with different number of keys and probabilities for space
+#k1,k2,k3,k4 are the number of non-space keys we want to test
+#   Mode a is Global clustering coefficient
+#   Mode b is Average clustering coefficient
 def keys(k1,k2,k3,k4,mode):
     k1_list = []
     k2_list = []
@@ -118,22 +122,24 @@ def keys(k1,k2,k3,k4,mode):
     plt.plot(s_range, k3_list, "g+")
     plt.plot(s_range, k4_list, "y", label="k= "+ str(k4))
     plt.plot(s_range, k4_list, "y+")
-    plt.legend(loc="upper right")
-    plt.ylim(0.0, 0.4)
+
     # plt.title("w= "+str(w)+"; "+"alpha, beta= "+str(alpha)+", "+str(beta)+"\n Equiprobable non-space keys")
     plt.title("nodes= "+str(nodes)+"; "+"alpha, beta= "+str(alpha)+", "+str(beta)+"\n Equiprobable non-space keys")
     plt.xlabel("P(s):q")
     if (mode=='a'):
+        plt.ylim(0.7, 1.0)
         plt.ylabel("Average CC")
+        plt.legend(loc="lower left")
         plt.savefig("KeyNum,ACC.png")
     else:
+        plt.ylim(0.0, 0.4)
+        plt.legend(loc="upper right")
         plt.ylabel("Global CC")
         plt.savefig("KeyNum,GCC.png")
 
 
 
-
-
+#funtion plot_lst() will return the list of ACC(GCC) of a specific number of keys with different q in s_range
 def plot_lst(key,s_range,mode):
     global keyNumber
     keyNumber=key+1
@@ -162,7 +168,7 @@ def plot_lst(key,s_range,mode):
             lst.append(nx.transitivity(G))
     return lst
 
-keys(2,3,4,5,'a')
+keys(2,3,4,5,'b')
 ########################Legend: the num of keys END####################################
 
 
@@ -171,8 +177,10 @@ keys(2,3,4,5,'a')
 
 
 ########################Legend: Key Prob####################################
-#Mode a is GCC
-#Mode b is Average CC
+#keyProb() funtion is to generate plots showing the change of ACC or GCC with different key probabilities
+#p1,p2,p3,p4 are the probability list we want to test
+#   Mode a is Global clustering coefficient
+#   Mode b is Average clustering coefficient
 def keyProb(p1,p2,p3,p4,mode):
     k1_list = []
     k2_list = []
@@ -202,7 +210,7 @@ def keyProb(p1,p2,p3,p4,mode):
     plt.xlabel("P(s):q")
     plt.ylabel("Average CC")
     if (mode=='a'):
-        plt.ylim(0.6, 1.0)
+        plt.ylim(0.7, 1.0)
         plt.legend(loc="lower left")
         plt.ylabel("Average CC")
         plt.savefig("KeyProb,ACC.png")
@@ -213,6 +221,7 @@ def keyProb(p1,p2,p3,p4,mode):
         plt.savefig("KeyProb,GCC.png")
 
 
+#funtion plot_lst_keyProb() will return the list of ACC(GCC) of a specific prbability list with different q in s_range
 def plot_lst_keyProb(prob_lst,s_range,mode):
     lst=[]
     for x in s_range:
@@ -237,8 +246,10 @@ def plot_lst_keyProb(prob_lst,s_range,mode):
 
 
 ########################Legend: Alpha, Beta####################################
-#Mode a is GCC
-#Mode b is Average CC
+#keyProb() funtion is to generate plots showing the change of ACC or GCC with different alpha and beta
+#BetaProb1,BetaProb2,BetaProb3,BetaProb4 are the beta probabilities we want to test
+#   Mode a is Global clustering coefficient
+#   Mode b is Average clustering coefficient
 def AlBe(BetaProb1,BetaProb2,BetaProb3,BetaProb4,mode):
     k1_list = []
     k2_list = []
@@ -276,7 +287,7 @@ def AlBe(BetaProb1,BetaProb2,BetaProb3,BetaProb4,mode):
         plt.ylabel("Global CC")
         plt.savefig("AlphaBeta,GCC.png")
 
-
+#funtion plot_lst_AlBe() will return the list of ACC(GCC) of a specific beta with different alphas in alpha_lst
 def plot_lst_AlBe(BetaProb,alpha_lst,mode):
     lst=[]
     for alpha in alpha_lst:
