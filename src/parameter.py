@@ -27,14 +27,14 @@ beta = 0.95 #factor beta
 #Create a Graph
 G=nx.Graph()
 
-tensor = []
-matrix = []
-pt = []#probability tensor
-pm = []#probability matrix
-plst = []#probability list (tensor)
-elst = []#entry list (tensor)
-mplst = []#probability list (matrix)
-melst = []#entry list (matrix)
+tensor = []# tensor_initialization() will build this tensor into a three dimensional array, in which each element is a combination of three keys.
+matrix = []# matrix_initialization() will build this tensor into a two dimensional array, in which each element is a combination of two keys.
+pt = []#probability tensor, a three dimensional array that stores the probability of entries in tensor.
+pm = []#probability matrix, a two dimensional array that stores the probability of entries in matrix.
+plst = []#probability list (tensor), an array stores all the probabilites in pt.
+elst = []#entry list (tensor), an array stores all the entries in tensor.
+mplst = []#probability list (matrix), an array stores all the probabilites in pm.
+melst = []#entry list (matrix), an array stores all the entries in matrix.
 ####################################################################################################
 #End of global variables
 ####################################################################################################
