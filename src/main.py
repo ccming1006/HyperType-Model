@@ -72,8 +72,6 @@ initialization(w)
 ###########################Initialization for 3D Typing Model End####################################
 
 
-
-
 ###########################Initialization for 2D Typing Model####################################
 # The following code is used only if we need to use original typing model to add edges
 # parameters:
@@ -93,19 +91,23 @@ def initialization2D(pairs,keyNumber,key_lst,prob):
     mplst.clear()
     melst.clear()
 
-
     #We only need to initialize the matrix since tensor is not used in the  original typing model
     matrix_initialization(keyNumber,key_lst,prob,matrix,pm,mplst,melst)
     imbalanceMatrix(pm,keyNumber,beta,prob,mplst)
 
     #add edges to graph G
     new_graph=generate_graph2D(G,pairs,elst,plst,melst,mplst,key_lst,prob)
-# initialization2D(130000,keyNumber,key_lst,[0.25,0.25,0.1,0.4])
+initialization2D(280000,keyNumber,key_lst,[0.25,0.35,0.2,0.2])
 ###########################Initialization for 2D Typing Model End####################################
 
-
-print("Nodes: "+str(G.order())) #number of nodes
-print("Edges: "+str(G.size()))  #number of edges
-print('Average clustering coefficient: '+str(nx.average_clustering(G))) #Average clustering coefficient
+# print("Nodes: "+str(G.order())) #number of nodes
+# print("Edges: "+str(G.size()))  #number of edges
+# print('Average clustering coefficient: '+str(nx.average_clustering(G))) #Average clustering coefficient
 print('Global clustering coefficient: '+str(nx.transitivity(G))) #Global clustering coefficient
 print('Size of the LCC: '+str(len(max(nx.connected_components(G), key=len)))) #Largest Connected Component
+
+#nx.draw(G, with_labels=False,node_size=2500,node_color='green',edge_color='black',width=10)
+# nx.draw_spring(G, with_labels=False,node_size=40)
+# nx.draw_planar(G, with_labels=False,node_size=1000,node_color='green',edge_color='grey',width=10)
+#nx.draw_random(G, with_labels=False,node_size=2500,node_color='green',edge_color='black',width=10)
+# plt.show()
