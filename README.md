@@ -22,13 +22,13 @@ This file contains the remaining helper functions to initialize the Typing model
 
 We can adjust parameters, such as probability list and the number of triples, in *main.py* to generate graphs using the HyperType model. Besides, if the user wants to combine the HyperType model with the Typing model, user can include the function called *initialization2D()* in the file. Then user should use the terminal to run *main.py* (*python main.py*). Then the information of the output graph, such as the number of nodes and the number of edges, will be returned in the terminal.
 
-![](demos/demo1)
+![](demos/demo1.png)
 
 ##### parameter.py
 
 Since we can adjust the parameters in the HyperType model to better fit real-world dataset, it is important to understand how certain graph properties, such as average clustering coefficent (acc), change with varying parameters. We can use *parameter.py* to realize this. 
 
-![](demos/demo2)
+![](demos/demo2.png)
 
 
 ## Reference
