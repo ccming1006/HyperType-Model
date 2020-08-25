@@ -3,6 +3,7 @@
 In this project, we introduced the HyperType model that incorporate triangles, which is an extension of the Random Typing model designed by **Akoglu and Faloutsos** [[1]](#1). The codes here are the python implementations of the HyperType model.
 
 Authors: Huandong Chang & Chuming Chen
+
 Sponser: Nicole Eikmeier
 
 
